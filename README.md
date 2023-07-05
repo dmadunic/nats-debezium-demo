@@ -130,8 +130,9 @@ sudo /etc/init.d/postgresql restart
 ```
 docker-compose up
 ```
-
-In the other terminal execute: `nats stream subjects DebeziumStream`
+This will startup debezium and nats servers. Once the services has started, open 
+another terminal and execute: `nats stream subjects DebeziumStream`
+You should see the following list of subjects wiht the message counts.
 
 ```
         postgres.public.profile:   3       postgres.geodata.country: 248
