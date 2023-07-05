@@ -1,0 +1,37 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+version: '3.8'
+services:
+  geodata-ng:
+    image: ag04/geodata-ng:latest
+    environment:
+      - GEODATA_API_URL=http://geodata-rest-sb:8080/api
+      - GEODATA_MNGMT_URL=http://geodata-rest-sb:8080/management
+      - GEODATA_SWAGGER_URL=http://geodata-rest-sb:8080/swagger-resources
+      - GEODATA_AUTH_URL=http://geodata-rest-sb:8081/auth
+    ports:
+    - "9000:80"
+  geodata-rest-sb:
+    image: ag04/geodata-rest-sb:latest
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      #- SPRING_DATASOURCE_URL=jdbc:postgresql://geodatarestsb-postgresql:5432/geodataRestSb
+      #- SPRING_LIQUIBASE_URL=jdbc:postgresql://geodatarestsb-postgresql:5432/geodataRestSb
+      - JHIPSTER_SLEEP=2 # gives time for other services to boot before the application
+      - DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/test
+      - DB_USER=geodata
+      - DB_PWD=geodatapwd
+      - DB_SCHEMA=geodata
+      # Check me!
+      - GR_LIQUIBASE_ENABLED=true
+      - LIQUIBASE_CONTEXTS=dev
+      - MAIL_HOST=localhost
+      - MAIL_USER=someUsername
+      - MAIL_PWD=somePassword
+      - APP_BASE_URL=http://localhost:8080
+    # On macOSX and Windows env comment the following two lines, they are linux workaround
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - 8080:8080
