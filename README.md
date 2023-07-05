@@ -10,6 +10,7 @@ The goal is to setup debezium to capture and data changes in filtered set of tab
 - User with non admin priviliges
 - User with database admin priviliges
 - Installed docker
+- nats cli installed
 
 ### 1. Create 'test' database
 Connect to Postgres default database (postgres) with user with administrative priviliges and execute:
@@ -110,32 +111,29 @@ ALTER TABLE geodata.currency OWNER TO REPLICATION_GROUP_TEST;
 ALTER TABLE public.profile OWNER TO REPLICATION_GROUP_TEST;
 ```
 
----
-
-1. Edit pg_hba.conf
-
-Add the following:
-
+## 3. Edit pg_hba.conf (optional?)
+Add the following line:
+```
 host replication debezium 0.0.0.0/0 trust
+```
 
+## 4. Edit postgresql.conf
+Add the following lines to the wal section:
 
-2. Edit postgresql.conf
+After editing these files you will need to restart postgres instance, by running for eample:
 
-
-
-Location of files:
-
-
-postgres=# show hba_file;
-              hba_file               
--------------------------------------
- /etc/postgresql/14/main/pg_hba.conf
-(1 row)
-
-postgres=# show config_file;
-               config_file               
------------------------------------------
- /etc/postgresql/14/main/postgresql.conf
-(1 row)
-
+```
 sudo /etc/init.d/postgresql restart
+```
+
+## Runing the demo
+```
+docker-compose up
+```
+
+In the other terminal execute: `nats stream subjects DebeziumStream`
+
+```
+        postgres.public.profile:   3       postgres.geodata.country: 248
+        postgres.geodata.currency: 20
+```
