@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   nats:
-    image: docker.io/nats:2.9.11
+    image: docker.io/nats:2.9.19
     ports:
       - "4222:4222"
       - "8222:8222"
@@ -9,7 +9,6 @@ services:
       - "--debug"
       - "--http_port=8222"
       - "--js"
-
   debezium:
     image: docker.io/debezium/server:2.1.1.Final
     volumes:
